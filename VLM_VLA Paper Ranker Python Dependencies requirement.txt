@@ -1,0 +1,57 @@
+ 6. Python Dependencies (requirements.txt)
+
+ - requests (for Semantic Scholar API calls)
+ - pyyaml (for config parsing)
+ - pandas (for data manipulation)
+ - python-dateutil (for date handling)
+ - ratelimit (for API rate limiting)
+
+ 7. Additional Features
+
+ - Deduplication: Use paper title similarity + author matching to identify duplicates
+ - Caching: Store API responses locally to minimize redundant API calls
+ - Historical tracking: Keep monthly snapshots to track citation growth
+ - Email notifications: Optional GitHub Actions notification on completion/failure
+ - Top authors tracking: Secondary report showing most prolific VLM/VLA researchers
+
+ Critical Files
+
+ - .github/workflows/monthly-update.yml - Automation engine
+ - scripts/fetch_papers.py - Core data collection
+ - scripts/rank_papers.py - Ranking algorithm
+ - scripts/generate_report.py - Output formatting
+ - config/search_config.yaml - Easy parameter tuning
+
+ Verification Steps
+
+ 1. Local testing:
+   - Run python scripts/fetch_papers.py to verify API connectivity
+   - Check that papers are fetched and cached
+   - Run python scripts/generate_report.py to verify markdown output
+ 2. GitHub Actions testing:
+   - Use workflow_dispatch to manually trigger workflow
+   - Verify that reports are generated and committed
+   - Check GitHub Actions logs for errors
+ 3. Monthly automation:
+   - Wait for scheduled run on 1st of next month
+   - Verify new report appears in data/ folder
+   - Compare with previous month to see citation growth
+ 4. Output validation:
+   - Verify top papers are truly VLM/VLA related
+   - Check that citation counts match Semantic Scholar website
+   - Ensure markdown renders correctly on GitHub
+
+ Trade-offs & Decisions
+
+ - Semantic Scholar vs Google Scholar: Semantic Scholar chosen for free API access and good citation data
+ - Markdown vs Dashboard: Markdown chosen for simplicity, version control, and GitHub rendering
+ - Monthly vs Weekly: Monthly updates balance freshness with API rate limits and noise reduction
+ - Citation count only: Simple metric; could expand to include influence scores, h-index, etc. in future
+
+ Future Enhancements
+
+ - Add filters for specific subfields (robotics VLA, medical VLM, etc.)
+ - Include conference/journal rankings (top-tier venues)
+ - Trending topics word cloud from abstracts
+ - Author collaboration network visualization
+ - Integration with Papers with Code for benchmark results
