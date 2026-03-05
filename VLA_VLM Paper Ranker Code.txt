@@ -1,0 +1,35 @@
+
+ name: Monthly Paper Update
+
+ on:
+   schedule:
+     - cron: '0 0 1 * *'  # Run at midnight on 1st of each month
+   workflow_dispatch:      # Allow manual triggering
+
+ jobs:
+   update-rankings:
+     runs-on: ubuntu-latest
+     steps:
+       - uses: actions/checkout@v4
+
+       - name: Set up Python
+         uses: actions/setup-python@v5
+         with:
+           python-version: '3.11'
+
+       - name: Install dependencies
+         run: pip install -r requirements.txt
+
+       - name: Fetch and rank papers
+         run: |
+           python scripts/fetch_papers.py
+           python scripts/rank_papers.py
+           python scripts/generate_report.py
+
+       - name: Commit results
+         run: |
+           git config user.name "GitHub Actions Bot"
+           git config user.email "actions@github.com"
+           git add data/
+           git commit -m "Update paper rankings - $(date +'%Y-%m')"
+           git push
